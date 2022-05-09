@@ -20,7 +20,23 @@ me.up_down_velocity = 0
 me.yaw_velocity = 0
 me.speed = 0
 
+###############  MODIFY THIS PARAMETERS  ###############
 
+obstacle_width = 50
+obstacle_depth =100
+sec_distance = 20
+
+h_min = 33
+h_max = 179
+s_min = 0
+s_max = 179
+v_min = 89
+v_max = 136
+threshold1 = 20
+threshold2 = 20
+
+focal_length = 934.61
+#########################################################
 
 print(me.get_battery())
 
@@ -41,8 +57,6 @@ global dir;
 def empty(a):
 	pass
 
-real_width = 20
-real_width_ref = 14.3
 
 fonts = cv2.FONT_HERSHEY_COMPLEX
 GREEN = (0, 255, 0)
@@ -92,8 +106,9 @@ def getContours(img,imgContour):
         	x , y , w, h = cv2.boundingRect(approx)
         	cx = int(x + (w / 2))  # CENTER X OF THE OBJECT
         	cy = int(y + (h / 2))  # CENTER X OF THE OBJECT
-        	focal_length = 934.61
-        	distance = (real_width * focal_length)/w
+        	
+            
+        	distance = (obstacle_width * focal_length)/w
 
         	if (cx >int(frameWidth/2)-deadZone and cx <int(frameWidth / 2)+deadZone):
               	#cv2.putText(imgContour, " MOVE TO SIDE " , (120, 50), cv2.FONT_HERSHEY_COMPLEX,1,(0, 0, 255), 3) #Display GO LEFT at coord (20,50), color 0 0 155 and thickness 3
@@ -129,14 +144,6 @@ while True:
 	imgContour = img.copy() #The image with the painted contours
 	imgHsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-	h_min = 33#cv2.getTrackbarPos("HUE Min","HSV") #get the values from the trackbar
-	h_max = 179#cv2.getTrackbarPos("HUE Max", "HSV")
-	s_min = 0#cv2.getTrackbarPos("SAT Min", "HSV")
-	s_max = 179#cv2.getTrackbarPos("SAT Max", "HSV")
-	v_min = 89#cv2.getTrackbarPos("VALUE Min", "HSV")
-	v_max = 136#cv2.getTrackbarPos("VALUE Max", "HSV")
-
-
 
 	lower = np.array([h_min,s_min,v_min])
 	upper = np.array([h_max,s_max,v_max])
@@ -146,8 +153,7 @@ while True:
 
 	imgBlur = cv2.GaussianBlur(result, (7, 7), 1)
 	imgGray = cv2.cvtColor(imgBlur, cv2.COLOR_BGR2GRAY)
-	threshold1 = 20
-	threshold2 = 20
+
 	imgCanny = cv2.Canny(imgGray, threshold1, threshold2)
 	kernel = np.ones((5, 5))
 	imgDil = cv2.dilate(imgCanny, kernel, iterations=1)
@@ -155,6 +161,7 @@ while True:
 	display(imgContour)
 
 	################# FLIGHT
+    
 	if startCounter == 0:
    	me.takeoff()
    	me.for_back_velocity = 100
@@ -162,14 +169,16 @@ while True:
 
 
 	if dir == 1:
- 	# me.for_back_velocity = 0
-   	me.move_left(70)
-   	me.move_forward(120)
-   	me.move_right(70)
+
+   	me.move_left(obstacle_with + sec_distance)
+   	me.move_forward(obstacle_depth + sec_distance)
+   	me.move_right(obstacle_with + sec_distance)
     
 
 	else:
    	me.left_right_velocity = 0; me.for_back_velocity = 10;me.up_down_velocity = 0; me.yaw_velocity = 0
+       
+       
    # SEND VELOCITY VALUES TO TELLO
 	if me.send_rc_control:
    	me.send_rc_control(me.left_right_velocity, me.for_back_velocity, me.up_down_velocity, me.yaw_velocity)
@@ -184,4 +193,6 @@ while True:
 
 # cap.release()
 cv2.destroyAllWindows()
+
+
 
