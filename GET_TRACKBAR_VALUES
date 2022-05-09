@@ -29,6 +29,7 @@ frameWidth = width
 frameHeight = height
 
 
+
 global imgContour
 global dir;
 def empty(a):
@@ -47,6 +48,7 @@ cv2.namedWindow("Parameters")
 cv2.resizeWindow("Parameters",640,240)
 cv2.createTrackbar("Threshold1","Parameters",166,255,empty)
 cv2.createTrackbar("Threshold2","Parameters",171,255,empty)
+
 #######################################################################
 
 
@@ -146,13 +148,15 @@ while True:
     getContours(imgDil, imgContour) # call the function to find find and color the edges
     display(imgContour)
     
-    print(h_min)
-    print(h_max)
-    print(s_min)
-    print(h_max)
-    print(v_min)
-    print(v_max)
-    
+    print("The value of h_min = " , h_min)
+    print("The value of h_max = " , h_max)
+    print("The value of s_min = " , s_min)
+    print("The value of s_max = " , s_max)
+    print("The value of v_min = " , v_min)
+    print("The value of v_max = " , v_max)
+    print("The value of treshold1 = " , threshold1)
+    print("The value of treshold2 = " , threshold2)
+    print("\n")
 
     stack = stackImages(0.9, ([img, result], [imgDil, imgContour]))
     cv2.imshow('Horizontal Stacking', stack)
