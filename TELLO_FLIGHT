@@ -24,7 +24,7 @@ me.speed = 0
 
 obstacle_width = 50
 obstacle_depth =100
-sec_distance = 20
+sec_distance = 30
 
 h_min = 33
 h_max = 179
@@ -115,7 +115,7 @@ def getContours(img,imgContour):
               	cv2.putText(imgContour, " OBSTACLE DETECTED ", (20, 50), cv2.FONT_HERSHEY_COMPLEX,1,(0, 0, 255), 3)
               	#cv2.rectangle(imgContour,(0,int(frameHeight/2-deadZone)),(int(frameWidth/2)-deadZone,int(frameHeight/2)+deadZone),(0,0,255),cv2.FILLED)
              	 
-        	if (cx >int(frameWidth/2)-deadZone and cx <int(frameWidth / 2)+deadZone and distance < 50):
+        	if (cx >int(frameWidth/2)-deadZone and cx <int(frameWidth / 2)+deadZone and distance < sec_distance):
               	cv2.putText(imgContour, " OBSTACLE NEAR " , (50, 20), cv2.FONT_HERSHEY_COMPLEX,1,(0, 255,0),3)#Display GO LEFT at coord (20,50), color 0 0 155 and thickness 3
               	#cv2.rectangle(imgContour,(0,int(frameHeight/2-deadZone)),(int(frameWidth/2)-deadZone,int(frameHeight/2)+deadZone),(0,0,255),cv2.FILLED)
               	dir = 1
